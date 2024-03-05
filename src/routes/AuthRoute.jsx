@@ -7,6 +7,7 @@ const AuthRoute = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
@@ -28,6 +29,7 @@ const AuthRoute = () => {
         if (response?.data?.status) {
           setIsAuthenticated(true);
           setLoading(false);
+          console.log("yaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
           navigate("/");
           return;
         }
@@ -40,7 +42,7 @@ const AuthRoute = () => {
     };
 
     checkAuthentication();
-  }, []);
+  }, [localStorage.getItem("token")]);
 
   return (
     <>
