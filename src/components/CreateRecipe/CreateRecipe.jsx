@@ -30,7 +30,7 @@ const CreateRecipe = () => {
 
     try {
       const getImagesResp = await axios.post(
-        "https://different-gold-vulture.cyclic.app/api/uploadimage",
+        "https://backend-food-recipe-eight.vercel.app/api/uploadimage",
         formData
       );
       if (!getImagesResp?.data?.status) {
@@ -48,7 +48,7 @@ const CreateRecipe = () => {
         user_id:localStorage.getItem("userid")
       };
       const recipeResponse = await axios.post(
-        "https://different-gold-vulture.cyclic.app/api/createrecipe",
+        "https://backend-food-recipe-eight.vercel.app/api/createrecipe",
         objToSend,
         {
           headers: {
