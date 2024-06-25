@@ -19,7 +19,7 @@ const AuthRoute = () => {
         }
 
         const response = await axios.get(
-          "https://different-gold-vulture.cyclic.app/api/verifyuser",
+          "https://backend-food-recipe-eight.vercel.app/api/verifyuser",
           {
             headers: {
               Authorization: `Bearer ${gettoken}`,
