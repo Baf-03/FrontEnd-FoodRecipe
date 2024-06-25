@@ -23,7 +23,7 @@ const RecipeComp = () => {
           projectId:id,
         }
        
-          const resp = await axios.post("https://different-gold-vulture.cyclic.app/api/checkfavoritesbyid",objToSend,{
+          const resp = await axios.post("https://backend-food-recipe-eight.vercel.app/api/checkfavoritesbyid",objToSend,{
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -48,7 +48,7 @@ const RecipeComp = () => {
       favorites:favorites
     }
    
-      const resp = await axios.post("https://different-gold-vulture.cyclic.app/api/addfavorites",objToSend,{
+      const resp = await axios.post("https://backend-food-recipe-eight.vercel.app/api/addfavorites",objToSend,{
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -63,7 +63,7 @@ const RecipeComp = () => {
     const getData = async () => {
       try {
         const response = await axios.get(
-          `https://different-gold-vulture.cyclic.app/api/findrecipe?recipe=${id}`,
+          `https://backend-food-recipe-eight.vercel.app/api/findrecipe?recipe=${id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
