@@ -15,7 +15,7 @@ export const signupUser = createAsyncThunk(
   'signup/signupUser',
   async ({ email, password, name }) => {
     try {
-      const response = await axios.post('https://different-gold-vulture.cyclic.app/api/signup', { email, password,name });
+      const response = await axios.post('https://backend-food-recipe-eight.vercel.app/api/signup', { email, password,name });
       
       if(response?.data?.status){ 
         console.log("Signup successful");
