@@ -28,7 +28,7 @@ const Dashboard = () => {
     setSearchValue(e);
     if (e) {
       const response = await axios.get(
-        `https://different-gold-vulture.cyclic.app/api/autocompletesearch?t=${e}`,
+        `https://backend-food-recipe-eight.vercel.app/api/autocompletesearch?t=${e}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -48,7 +48,7 @@ const Dashboard = () => {
   const submitHandler = async () => {
     setAutoComplete([]);
     const searchResp = await axios.get(
-      `https://different-gold-vulture.cyclic.app/api/searchrecipe?t=${searchValue}`,
+      `https://backend-food-recipe-eight.vercel.app/api/searchrecipe?t=${searchValue}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
