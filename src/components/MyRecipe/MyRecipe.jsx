@@ -16,7 +16,7 @@ const MyRecipe = () => {
     
     useEffect(() => {
      const getMyRecipes = async()=>{
-        const response =await axios.get(`https://different-gold-vulture.cyclic.app/api/getmyrecipe?userId=${localStorage.getItem("userid")}`,{
+        const response =await axios.get(`https://backend-food-recipe-eight.vercel.app/api/getmyrecipe?userId=${localStorage.getItem("userid")}`,{
             headers: {
               Authorization: `Bearer ${token}`
             }
