@@ -14,7 +14,7 @@ export const LoginUser = createAsyncThunk(
   "login/loginUser",
   async ({ email, password }) => {
     try {
-      const response = await axios.post("https://different-gold-vulture.cyclic.app/api/login", {
+      const response = await axios.post("https://backend-food-recipe-eight.vercel.app/api/login", {
         email,
         password,
       });
