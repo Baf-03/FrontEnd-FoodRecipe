@@ -21,7 +21,7 @@ const FavRecipe = () => {
     const getFavRes = async () => {
       try {
         const resp = await axios.post(
-          "https://different-gold-vulture.cyclic.app/api/getallfavorites",
+          "https://backend-food-recipe-eight.vercel.app/api/getallfavorites",
           objToSend,
           {
             headers: {
