@@ -12,7 +12,7 @@ export const getRecipes = createAsyncThunk(
 
     try {
         const response = await axios.get(
-            "https://different-gold-vulture.cyclic.app/api/getrecipe",
+            "https://backend-food-recipe-eight.vercel.app/api/getrecipe",
             {
               headers: {
                 Authorization: `Bearer ${token}`,
