@@ -11,66 +11,69 @@ const CreateRecipe = () => {
   const [ingredients, setIngredients] = useState("");
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const submitRecipe = async () => {
     setLoading(true);
 
     if (!inputs.length || !recipeName || !ingredients || !files.length) {
-      alert("all fields are required");
+      alert("All fields are required");
       setLoading(false);
-
       return;
     }
 
     const formData = new FormData();
-
-    files.forEach((file, index) => {
-      formData.append(`file${index}`, file);
-    });
+    files.forEach((file, index) => formData.append(`file${index}`, file));
 
     try {
       const getImagesResp = await axios.post(
         "https://backend-food-recipe-eight.vercel.app/api/uploadimage",
         formData
       );
-      if (!getImagesResp?.data?.status) {
-        alert("something went wrong on our side plz try again later");
-        setLoading(false);
 
+      if (!getImagesResp?.data?.status) {
+        alert("Something went wrong, please try again later.");
+        setLoading(false);
         return;
       }
+
       const imgurls = getImagesResp?.data?.data;
       const objToSend = {
         ingredients,
         recipeName,
         steps: inputs,
         images: imgurls,
-        user_id:localStorage.getItem("userid")
+        user_id: localStorage.getItem("userid"),
       };
-      const recipeResponse = await axios.post(
+
+      await axios.post(
         "https://backend-food-recipe-eight.vercel.app/api/createrecipe",
         objToSend,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
+
       setOpen(true);
-      setLoading(false);
-      setRecipeName("");
-      setIngredients("");
-      setInputs([]);
-      setStepsCount("");
-      setFiles([]);
+      resetForm();
     } catch (error) {
       console.error("Error uploading images:", error);
       setLoading(false);
     }
   };
+
+  const resetForm = () => {
+    setRecipeName("");
+    setIngredients("");
+    setInputs([]);
+    setStepsCount("");
+    setFiles([]);
+    setLoading(false);
+  };
+
   const handleStepsCountChange = (e) => {
     const value = e.target.value;
-    if (value <= 15 && value >= 0) {
+    if (value >= 0 && value <= 15) {
       setStepsCount(value);
       setInputs([]);
     }
@@ -89,17 +92,17 @@ const CreateRecipe = () => {
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const imagePreviews = files.map((file, index) => (
-    <div key={index}>
+    <div key={index} className="relative">
       <img
         src={URL.createObjectURL(file)}
-        // alt={file.name}
-        className="w-[100px] "
+        alt="Preview"
+        className="w-24 h-24 object-cover rounded-lg border"
       />
     </div>
   ));
 
-  const renderAdditionalInputs = () => {
-    return Array.from({ length: stepscount }, (_, index) => (
+  const renderAdditionalInputs = () =>
+    Array.from({ length: stepscount }, (_, index) => (
       <Input
         key={index}
         variant="standard"
@@ -107,33 +110,27 @@ const CreateRecipe = () => {
         placeholder={`Enter step ${index + 1}`}
         value={inputs[index] || ""}
         onChange={(e) => handleInputChange(index, e.target.value)}
+        className="mt-2"
       />
     ));
-  };
-
-  const [open, setOpen] = useState(false);
-
-  const handleClick = () => {
-    setOpen(true);
-  };
 
   const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
+    if (reason === "clickaway") return;
     setOpen(false);
   };
+
   return (
-    <div className=" py-5 flex flex-col items-center justify-center">
-      <h2 className="font-bold text-[1.5rem] my-4">Add Your Recipe</h2>
-      <div className="p-3 md:w-[50%] flex flex-col gap-4 ">
+    <div className="min-h-screen bg-gray-50 py-10 px-4 flex flex-col items-center">
+      <h2 className="text-3xl font-bold text-teal-600 mb-6">Add Your Recipe</h2>
+
+      <div className="w-full max-w-xl bg-white shadow-lg rounded-lg p-6">
         <Input
           value={recipeName}
           variant="standard"
           label="Recipe Name"
           placeholder="Enter Recipe Name"
           onChange={(e) => setRecipeName(e.target.value)}
+          className="mb-4"
         />
         <Input
           value={ingredients}
@@ -141,37 +138,40 @@ const CreateRecipe = () => {
           label="Ingredients"
           placeholder="Enter Ingredients"
           onChange={(e) => setIngredients(e.target.value)}
+          className="mb-4"
         />
         <Input
           variant="standard"
           value={stepscount}
           onChange={handleStepsCountChange}
           type="number"
-          label="Enter steps count"
-          placeholder="Enter Recipe Name"
+          label="Number of Steps"
+          placeholder="Enter the number of steps"
+          className="mb-4"
         />
-        <div className="flex flex-col gap-4 max-h-[20rem] overflow-y-scroll p-4">
-          {stepscount ? renderAdditionalInputs() : null}
+
+        <div className="max-h-60 overflow-y-auto p-2">
+          {renderAdditionalInputs()}
         </div>
+
         <div
           {...getRootProps()}
-          className="border border-red-500 p-5 min-h-[10rem] flex justify-center items-center"
+          className="border-2 border-dashed border-teal-500 p-5 rounded-lg mt-4 flex flex-col items-center justify-center cursor-pointer hover:bg-teal-50 transition"
         >
           <input {...getInputProps()} />
-          <p>Drag 'n' drop some files here, or click to select files</p>
-          <div className="flex flex-wrap gap-3 justify-center ">
-            {" "}
-            {imagePreviews}
-          </div>
+          <p className="text-gray-500">Drag 'n' drop files here, or click to select files</p>
+          <div className="mt-2 flex flex-wrap gap-3">{imagePreviews}</div>
         </div>
+
+        <Button
+          onClick={submitRecipe}
+          disabled={loading}
+          className="w-full mt-6 bg-teal-500 hover:bg-teal-600 text-white py-2 rounded-lg transition"
+        >
+          {loading ? <Spinner /> : "Submit Recipe"}
+        </Button>
       </div>
-      <Button
-        sx={{ marginTop: 2 }}
-        onClick={submitRecipe}
-        disabled={loading == true}
-      >
-        {loading ? <Spinner /> : "Submit Recipe"}
-      </Button>
+
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
@@ -179,7 +179,7 @@ const CreateRecipe = () => {
           variant="filled"
           sx={{ width: "100%" }}
         >
-          This is a success Alert inside a Snackbar!
+          Recipe submitted successfully!
         </Alert>
       </Snackbar>
     </div>

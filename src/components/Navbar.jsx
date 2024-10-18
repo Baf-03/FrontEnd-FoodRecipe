@@ -1,248 +1,96 @@
-import * as React from "react";
-import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
+export default function Navbar() {
+  const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
-
-export default function PrimarySearchAppBar() {
-  const navigate = useNavigate()
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleLogout =()=>{
+  const handleLogout = () => {
     localStorage.clear();
     window.location.reload();
-  }
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
   };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleLogout}>Logout</MenuItem>
-    </Menu>
-  );
-
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-       
-        <Link to={"/my-recipe"}>
-          <span className="text-[0.8rem]">your recipes</span>
-        </Link>
-        
-      </MenuItem>
-      <MenuItem>
-        <Link to={"/create-recipe"}>
-          <span className="text-[0.8rem]">Create Recipe</span>
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <Link to={"/"}>
-          <span className="text-[0.8rem]">Dashboard</span>
-        </Link>
-      </MenuItem>
-      <MenuItem>
-      <Link to={"/my-fav-recipe"}>
-          <span className="text-[0.8rem]">favourite Recipes</span>
-        </Link>
-        
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
 
   return (
-    <Box sx={{ flexGrow: 1 }} >
-      <AppBar position="static" >
-        <Toolbar className="bg-gray-300 text-black">
-         
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
+    <nav className="bg-gray-800 text-white shadow-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center">
+            <Link
+              to="/"
+              className="text-2xl font-bold tracking-wide hover:text-teal-400 transition duration-300"
+            >
+              Recipe Sharing App
+            </Link>
+          </div>
+
+          <div className="hidden md:flex space-x-6">
+            <NavLink to="/my-recipe" label="Your Recipes" />
+            <NavLink to="/create-recipe" label="Create Recipe" />
+            <NavLink to="/" label="Dashboard" />
+            <NavLink to="/my-fav-recipe" label="Favourite Recipes" />
+          </div>
+
+          <div className="hidden md:flex items-center space-x-4">
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red-500 rounded-md hover:bg-red-600 transition duration-300 shadow-md"
+            >
+              Logout
+            </button>
+            <Link to="/profile">
+              <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300">
+                <span className="text-lg">👤</span>
+              </div>
+            </Link>
+          </div>
+
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-white hover:text-gray-300 focus:outline-none"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {isMobileMenuOpen && (
+        <div className="md:hidden px-2 pt-2 pb-3 space-y-2">
+          <NavLink to="/my-recipe" label="Your Recipes" />
+          <NavLink to="/create-recipe" label="Create Recipe" />
+          <NavLink to="/" label="Dashboard" />
+          <NavLink to="/my-fav-recipe" label="Favourite Recipes" />
+          <button
+            onClick={handleLogout}
+            className="block text-sm mt-2 px-4 py-2 bg-red-500 rounded-md hover:bg-red-600 transition duration-300"
           >
-            Recipe Sharing App
-          </Typography>
-          
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Link to={"/my-recipe"}>
-                <span className="text-[0.8rem]">your recipes</span>
-              </Link>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Link to={"/create-recipe"}>
-                <span className="text-[0.8rem]">create recipe</span>
-              </Link>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Link to={"/"}>
-                <span className="text-[0.8rem]">dashboard</span>
-              </Link>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Link to={"/my-fav-recipe"}>
-                <span className="text-[0.8rem]">favourite Recipes</span>
-              </Link>
-            </IconButton>
-            
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
-    </Box>
+            Logout
+          </button>
+        </div>
+      )}
+    </nav>
   );
 }
+
+const NavLink = ({ to, label }) => (
+  <Link
+    to={to}
+    className="relative text-sm font-medium text-white after:absolute after:w-full after:h-[2px] after:scale-x-0 after:bg-teal-400 after:bottom-0 after:left-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+  >
+    {label}
+  </Link>
+);

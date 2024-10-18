@@ -1,49 +1,50 @@
-import {
-    Card,
-    CardHeader,
-    CardBody,
-    CardFooter,
-    Typography,
-    Button,
-  } from "@material-tailwind/react";
-   
-  export function CardComp({detail}) {
-    const {images,ingredients,recipe_name,steps,_id } = detail
-    return (
-      <Card className="w-[20rem]">
-        <CardHeader shadow={false} floated={false} className="h-[15rem]">
-          <img
-            src={images[0]}
-            alt="card-image"
-            className="h-full w-full object-cover bg-blue-gray-300 border"
-          />
-        </CardHeader>
-        <CardBody>
-          <div className="mb-2 flex items-center justify-between">
-            <Typography color="blue-gray" className="font-medium">
-              {recipe_name}
-            </Typography>
-            {/* <Typography color="blue-gray" className="font-medium">
-              $95.00
-            </Typography> */}
-          </div>
-          <Typography
-            variant="small"
-            color="gray"
-            className="font-normal opacity-75 line-clamp-1"
-          >
-            {ingredients}
-          </Typography>
-        </CardBody>
-        <CardFooter className="pt-0">
-          <Button
-            ripple={false}
-            fullWidth={true}
-            className="bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
+import React from "react";
+import { Link } from "react-router-dom";
+
+export function CardComp({ detail }) {
+  const { images, ingredients, recipe_name, _id } = detail;
+
+  // Ensure ingredients are displayed correctly (even if not an array)
+  const ingredientsText = Array.isArray(ingredients)
+    ? ingredients.join(", ")
+    : ingredients || "No ingredients available";
+
+  return (
+    <div className="group relative w-[20rem] bg-white shadow-lg rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+      {/* Card Header with Image */}
+      <div className="h-[15rem] overflow-hidden">
+        <img
+          src={images && images[0] ? images[0] : "https://via.placeholder.com/300"}
+          alt={recipe_name}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+      </div>
+
+      {/* Card Body */}
+      <div className="p-4">
+        <div className="mb-2 flex items-center justify-between">
+          <h2 className="text-lg font-bold text-gray-800 group-hover:text-blue-500 transition duration-300">
+            {recipe_name}
+          </h2>
+        </div>
+
+        <p className="text-sm text-gray-600 line-clamp-2">
+          {ingredientsText}
+        </p>
+      </div>
+
+      {/* Card Footer with Button */}
+      <div className="p-4 pt-0">
+        <Link to={`/recipe/${_id}`}>
+          <button
+            className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md 
+            hover:bg-blue-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 
+            focus:ring-opacity-75 transition duration-300"
           >
             Show Details
-          </Button>
-        </CardFooter>
-      </Card>
-    );
-  }
+          </button>
+        </Link>
+      </div>
+    </div>
+  );
+}
